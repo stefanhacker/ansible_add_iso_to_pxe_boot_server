@@ -1,0 +1,145 @@
+---
+- name: install apt-get install genisoimage
+  package:
+    name: genisoimage
+    state: present
+- name: hinzufügen von syslinux.cfg
+  template:
+    src: "syslinux.cfg.j2"
+    dest: "{{ tftp_root_folder }}{{ tftp_debian_installer_folder_with_arch }}boot-screens/syslinux.cfg"
+
+- name: hinzufügen von preseed.cfg
+  template:
+    src: "preseed.cfg.j2"
+    dest: "{{ tftp_root_folder }}{{ tftp_debian_installer_folder_with_arch }}preseed.cfg"
+
+
+- name: check txt.cfg exist
+  stat:
+    path: "{{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}"
+  register: stat_result_txt_cfg
+
+
+- name: when first run delete txt.cfg
+  raw: "rm {{ tftp_root_folder }}{{ tftp_debian_installer_folder_with_arch }}boot-screens/txt.cfg"
+  when: first_run == true and stat_result_txt_cfg.stat.exists == True
+
+- name: when first run create txt.cfg
+  raw: "touch {{ tftp_root_folder }}{{ tftp_debian_installer_folder_with_arch }}boot-screens/txt.cfg"
+  when: first_run == true
+
+- name: add menu entry
+  blockinfile:
+    dest:  "{{ tftp_root_folder }}{{ tftp_debian_installer_folder_with_arch }}boot-screens/txt.cfg"
+    block: "{{ lookup('template', 'txt.cfg.j2') }}"
+    marker: "; {mark} ANSIBLE MANAGED BLOCK FOR {{ menu_label }}"
+  
+
+
+#- name: hinzufügen von txt.cfg
+#  template:
+#    src: "txt.cfg.j2"
+#    dest: "{{ tftp_root_folder }}{{ tftp_debian_installer_folder_with_arch }}boot-screens/txt.cfg"
+
+
+
+- name: check destination folder exist
+  stat:
+    path: "{{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}"
+  register: stat_result_dest_folder
+
+- name: Create folder if not exist
+  raw: "mkdir -p {{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}"
+  when: stat_result_dest_folder.stat.exists == False
+
+- name: Check iso exist, when no download it in next task,  when url is provided
+  stat:
+    path: "{{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}{{ tftp_iso_filename }}"
+  register: stat_result_iso
+
+- name: Download iso
+  get_url:
+    url: "{{ tftp_download_public_iso_url }}"
+    dest: "{{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}{{ tftp_iso_filename }}"
+    mode: 0664
+  when: stat_result_iso.stat.exists == False
+
+
+- name: check if filessystem.squashfs exists, because squash file will be exctracted everytime because squash could change in iso
+  stat:
+    path: "{{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}{{ live_file_squash_file_name }}"
+  register: stat_result_delete_extract_squashfs
+ 
+
+- name: delete squash file
+  raw: "rm '{{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}{{ live_file_squash_file_name }}'"
+  when: stat_result_delete_extract_squashfs.stat.exists == True
+
+- name: Extract kernel and ramdisk from a LiveCD
+  include_role: 
+      name: extract_iso
+  vars:
+      path_to_iso: "{{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}{{ tftp_iso_filename }}"
+      path_to_extract_dest:  "{{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}"
+      extract_folder_and_files_from_iso:
+        - "{{live_folder_path }}{{ live_file_squash_file_name }}"
+        - "{{live_folder_path }}{{ live_file_initrd_file_name }}"
+        - "{{live_folder_path }}{{ live_file_vmlinuz_file_name }}"
+      fullpath_paremeter: e
+
+
+- name: show extract_full_iso_to_cdrom_folder
+  debug:  
+    msg: "Content: {{ extract_full_iso_to_cdrom_folder }}"
+
+- name: check if folder exists delete full iso path if wished with variable
+  stat:
+    path: "{{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}/cdrom"
+  register: stat_result_delete_extract_full_iso_to_cdrom_folder_before_extract 
+  when: delete_extract_full_iso_to_cdrom_folder_before_extract == True and extract_full_iso_to_cdrom_folder == True 
+
+
+- name: delete full iso path if wished with variable
+  raw: "rm -r '{{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}/cdrom'"
+  when: delete_extract_full_iso_to_cdrom_folder_before_extract == True and extract_full_iso_to_cdrom_folder == True and stat_result_delete_extract_full_iso_to_cdrom_folder_before_extract.stat.exists == True
+
+- name: Extract full iso to cdrom path
+  include_role: 
+      name: extract_iso
+  vars:
+      path_to_iso: "{{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}{{ tftp_iso_filename }}"
+      path_to_extract_dest:  "{{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}/cdrom"
+      fullpath_paremeter: x
+      extract_folder_and_files_from_iso: []
+  when: extract_full_iso_to_cdrom_folder == True
+
+
+#  iso_extract:
+#    image: "{{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}{{ tftp_iso_filename }}"
+#    dest: "{{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}"
+#    files: "{{ isofilelist }}"
+      #- "{{live_folder_path }}{{ live_file_squash_file_name }}"
+      #- "{{live_folder_path }}{{ live_file_initrd_file_name }}"
+      #- "{{live_folder_path }}{{ live_file_system_map_file_name }}"
+      #- "{{live_folder_path }}{{ live_file_vmlinuz_file_name }}"
+    #with_items: "{{ userdata }}"
+
+
+
+- name: Check vmlinuz exist, in a few distro the vmlinuz called vmlinuz, that why we cant rename ist
+  stat:
+    path: "{{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}vmlinuz"
+  register: stat_result_mv_vmlinuz
+
+- name: copy vmlinuz
+  raw: cp {{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}{{ live_file_vmlinuz_file_name }} {{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}vmlinuz
+  when: stat_result_mv_vmlinuz.stat.exists == False
+
+- name: Check initrd exist, in a few distro the initrd called initrd, that why we cant rename ist
+  stat:
+    path: "{{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}initrd"
+  register: stat_result_mv_initrd
+
+- name: copy initrd
+  raw: cp {{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}{{ live_file_initrd_file_name }} {{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}initrd
+  when: stat_result_mv_initrd.stat.exists == False

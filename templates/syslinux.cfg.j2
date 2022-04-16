@@ -1,0 +1,8 @@
+  GNU nano 5.4                      syslinux.cfg                                
+# D-I config version 2.0
+# search path for the c32 support libraries (libcom32, libutil etc.)
+path {{  tftp_debian_installer_folder_with_arch }}boot-screens/
+include {{  tftp_debian_installer_folder_with_arch }}boot-screens/menu.cfg
+default {{  tftp_debian_installer_folder_with_arch }}boot-screens/vesamenu.c32
+prompt 0
+timeout {{ menu_timeout }}

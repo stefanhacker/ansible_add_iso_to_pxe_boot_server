@@ -1,0 +1,10 @@
+label {{ menu_label }}
+        menu {{ menu_label }}
+        {% if menu_make_default == true %}
+        make default
+        {% endif %}
+        kernel {{ tftp_images_folder }}{{ tftp_os_name_with_arch }}vmlinuz
+        append {{ menu_append }}
+
+
+
