@@ -19,10 +19,8 @@ tftp_server_ip_or_dnsname: 172.10.10.1
 #linux Livefolder variables, the folder were the filesystem.squash is in the extracted iso file
 
 live_folder_path: live/
-#live_file_config_file_name: config-5.10.0-13-amd64
 live_file_squash_file_name: filesystem.squashfs
 live_file_initrd_file_name: initrd.img-5.10.0-13-amd64
-#live_file_system_map_file_name: System.map-5.10.0-13-amd64
 live_file_vmlinuz_file_name: vmlinuz-5.10.0-13-amd64
 
 #extract full iso for live boot over nfs.

@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   author: Stefan Hacker
-  description: Injects configs und Packages into Debian/ubuntu  based Live ISOs
+  description: Copies an iso to pxe bootserver and creates/alters the Menu config.
   company: Hacker-Net Telekommuniaktion
 
   license: MIT License
@@ -25,3 +25,5 @@ galaxy_info:
     - pxe
     - custom
     - customization
+dependencies:
+  - role : stefanhacker.ansible_extract_iso
