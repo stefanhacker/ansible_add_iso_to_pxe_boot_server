@@ -1,11 +1,8 @@
-
 ---
 #Run variables
 #if this role is called even more as once, then menu added after, to overwrite file at first run then the variable first entry must set to true.
 #set it on false too, wenn you add to exist entry later
 first_run: false
-
-
 #TFTP Path and file Variables
 tftp_root_folder: /srv/tftp/
 tftp_debian_installer_folder_with_arch: debian-installer/amd64/
@@ -15,20 +12,16 @@ tftp_iso_filename: debianlive.iso
 #when the iso ist not copied other way, you can provide an url to download iso
 tftp_download_public_iso_url: https://cdimage.debian.org/debian-cd/current-live/amd64/iso-hybrid/debian-live-11.3.0-amd64-standard.iso
 tftp_server_ip_or_dnsname: 172.10.10.1
-
 #linux Livefolder variables, the folder were the filesystem.squash is in the extracted iso file
-
 live_folder_path: live/
 live_file_squash_file_name: filesystem.squashfs
 live_file_initrd_file_name: initrd.img-5.10.0-13-amd64
 live_file_vmlinuz_file_name: vmlinuz-5.10.0-13-amd64
-
 #extract full iso for live boot over nfs.
 #if full iso needed because image uses nfs. the full image is extrated in the base folder
 #{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}/cdrom
 delete_extract_full_iso_to_cdrom_folder_before_extract: False
 extract_full_iso_to_cdrom_folder: False
-
 #PXE Bootmenü Settings
 label: liveiso
 menu_label: "Debian 11 Live ISO"
