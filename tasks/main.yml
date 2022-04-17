@@ -69,6 +69,14 @@
   raw: "rm '{{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}{{ live_file_squash_file_name }}'"
   when: stat_result_delete_extract_squashfs.stat.exists == True
 
+- name: Debug show live_file_squash_file_name live_file_initrd_file_name live_file_vmlinuz_file_name
+  Debug:
+    msg: 
+    - "SQUASH VAR {{live_folder_path }}{{ live_file_squash_file_name }}"
+    - "INITRD VAR {{live_folder_path }}{{ live_file_initrd_file_name }}"
+    - "VMLINZ VAR {{live_folder_path }}{{ live_file_vmlinuz_file_name }}"
+  when: live_file_squash_file_name is defined and live_file_initrd_file_name is defined and live_file_vmlinuz_file_name
+  
 - name: Extract kernel and ramdisk from a LiveCD
   import_role: 
     name: stefanhacker.ansible_extract_iso
