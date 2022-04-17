@@ -26,4 +26,4 @@ galaxy_info:
     - custom
     - customization
 dependencies:
-  - role : stefanhacker.ansible_extract_iso
+  - role : ansible_extract_iso

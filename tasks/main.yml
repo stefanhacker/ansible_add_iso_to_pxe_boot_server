@@ -8,12 +8,6 @@
     src: "syslinux.cfg.j2"
     dest: "{{ tftp_root_folder }}{{ tftp_debian_installer_folder_with_arch }}boot-screens/syslinux.cfg"
 
-- name: hinzufügen von preseed.cfg
-  template:
-    src: "preseed.cfg.j2"
-    dest: "{{ tftp_root_folder }}{{ tftp_debian_installer_folder_with_arch }}preseed.cfg"
-
-
 - name: check txt.cfg exist
   stat:
     path: "{{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}"
@@ -76,9 +70,8 @@
   when: stat_result_delete_extract_squashfs.stat.exists == True
 
 - name: Extract kernel and ramdisk from a LiveCD
-  include_role: 
+  import_role: 
     name: stefanhacker.ansible_extract_iso
-    tasks_from: main.yml
   vars:
     path_to_iso: "{{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}{{ tftp_iso_filename }}"
     path_to_extract_dest:  "{{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}"
@@ -105,9 +98,8 @@
   when: delete_extract_full_iso_to_cdrom_folder_before_extract == True and extract_full_iso_to_cdrom_folder == True and stat_result_delete_extract_full_iso_to_cdrom_folder_before_extract.stat.exists == True
 
 - name: Extract full iso to cdrom path
-  include_role: 
+  import_role: 
     name: stefanhacker.ansible_extract_iso
-    tasks_from: main.yml
   vars:
     path_to_iso: "{{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}{{ tftp_iso_filename }}"
     path_to_extract_dest:  "{{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}/cdrom"
