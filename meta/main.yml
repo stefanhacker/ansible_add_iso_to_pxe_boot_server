@@ -27,6 +27,4 @@ galaxy_info:
     - customization
 dependencies:
   - role: stefanhacker.ansible_extract_iso
-    vars:
-      run: false
-      
+    tags: [never]
