@@ -9,19 +9,21 @@
     dest: "{{ tftp_root_folder }}{{ tftp_debian_installer_folder_with_arch }}boot-screens/syslinux.cfg"
 - name: Show given variables
   debug:
-    - msg: "First run variable : {{ first_run }}"
-    - msg: "TFTP-Root Folder: {{ tftp_root_folder }}"
-    - msg: "TFTP_debian_installer_folder_with_arch {{ tftp_debian_installer_folder_with_arch }}"
-    - msg: "tftp_images_folder : {{ tftp_images_folder }}"
-    - msg: "tftp_os_name_with_arch : {{ tftp_os_name_with_arch }}"
-    - msg: "Menu Label : {{ menu_label }}"
-    - msg: "tftp_iso_filename : {{ tftp_iso_filename }}"
-    - msg: "live_folder_path : {{ live_folder_path }}"
-    - msg: "SQUASH VAR {{ live_folder_path }}{{ live_file_squash_file_name }}"
-    - msg: "INITRD VAR {{ live_folder_path }}{{ live_file_initrd_file_name }}"
-    - msg: "VMLINZ VAR {{ live_folder_path }}{{ live_file_vmlinuz_file_name }}"
-    - msg: "delete_extract_full_iso_to_cdrom_folder_before_extract : {{ delete_extract_full_iso_to_cdrom_folder_before_extract }}"
-    - msg: "extract_full_iso_to_cdrom_folder : {{ extract_full_iso_to_cdrom_folder }}"
+     msg: 
+      - "First run variable : {{ first_run }}"
+      - "TFTP-Root Folder: {{ tftp_root_folder }}"
+      - "TFTP_debian_installer_folder_with_arch {{ tftp_debian_installer_folder_with_arch }}"
+      - "tftp_images_folder : {{ tftp_images_folder }}"
+      - "tftp_os_name_with_arch : {{ tftp_os_name_with_arch }}"
+      - "Menu Label : {{ menu_label }}"
+      - "tftp_iso_filename : {{ tftp_iso_filename }}"
+      - "live_folder_path : {{ live_folder_path }}"
+      - "SQUASH VAR {{ live_folder_path }}{{ live_file_squash_file_name }}"
+      - "INITRD VAR {{ live_folder_path }}{{ live_file_initrd_file_name }}"
+      - "VMLINZ VAR {{ live_folder_path }}{{ live_file_vmlinuz_file_name }}"
+      - "delete_extract_full_iso_to_cdrom_folder_before_extract : {{ delete_extract_full_iso_to_cdrom_folder_before_extract }}"
+      - "extract_full_iso_to_cdrom_folder : {{ extract_full_iso_to_cdrom_folder }}"
+      
 - name: check txt.cfg exist
   stat:
     path: "{{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}"
@@ -84,11 +86,11 @@
   when: stat_result_delete_extract_squashfs.stat.exists == True
 
 - name: Debug show live_file_squash_file_name live_file_initrd_file_name live_file_vmlinuz_file_name
-  debug:
-    msg: 
-    - "SQUASH VAR {{ live_folder_path }}{{ live_file_squash_file_name }}"
-    - "INITRD VAR {{ live_folder_path }}{{ live_file_initrd_file_name }}"
-    - "VMLINZ VAR {{ live_folder_path }}{{ live_file_vmlinuz_file_name }}"
+  debug: 
+     msg: 
+       - "SQUASH VAR {{ live_folder_path }}{{ live_file_squash_file_name }}"
+       - "INITRD VAR {{ live_folder_path }}{{ live_file_initrd_file_name }}"
+       - "VMLINZ VAR {{ live_folder_path }}{{ live_file_vmlinuz_file_name }}"
   when: live_file_squash_file_name is defined and live_file_initrd_file_name is defined and live_file_vmlinuz_file_name
 
 - name: Extract kernel and ramdisk from a LiveCD
