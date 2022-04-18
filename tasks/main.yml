@@ -23,7 +23,7 @@
       - "VMLINZ VAR {{ live_folder_path }}{{ live_file_vmlinuz_file_name }}"
       - "delete_extract_full_iso_to_cdrom_folder_before_extract : {{ delete_extract_full_iso_to_cdrom_folder_before_extract }}"
       - "extract_full_iso_to_cdrom_folder : {{ extract_full_iso_to_cdrom_folder }}"
-      
+
 - name: check txt.cfg exist
   stat:
     path: "{{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}"
@@ -94,7 +94,7 @@
   when: live_file_squash_file_name is defined and live_file_initrd_file_name is defined and live_file_vmlinuz_file_name
 
 - name: Extract kernel and ramdisk from a LiveCD
-  import_role: 
+  include_role: 
     name: stefanhacker.ansible_extract_iso
   vars:
     path_to_iso: "{{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}{{ tftp_iso_filename }}"
@@ -122,7 +122,7 @@
   when: delete_extract_full_iso_to_cdrom_folder_before_extract == True and extract_full_iso_to_cdrom_folder == True and stat_result_delete_extract_full_iso_to_cdrom_folder_before_extract.stat.exists == True
 
 - name: Extract full iso to cdrom path
-  import_role: 
+  include_role: 
     name: stefanhacker.ansible_extract_iso
   vars:
     path_to_iso: "{{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}{{ tftp_iso_filename }}"
