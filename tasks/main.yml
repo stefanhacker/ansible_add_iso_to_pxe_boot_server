@@ -84,9 +84,9 @@
     path_to_iso: "{{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}{{ tftp_iso_filename }}"
     path_to_extract_dest:  "{{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}"
     extract_folder_and_files_from_iso:
-    - "{{live_folder_path }}{{ live_file_squash_file_name }}"
-    - "{{live_folder_path }}{{ live_file_initrd_file_name }}"
-    - "{{live_folder_path }}{{ live_file_vmlinuz_file_name }}"
+      - "{{live_folder_path }}{{ live_file_squash_file_name }}"
+      - "{{live_folder_path }}{{ live_file_initrd_file_name }}"
+      - "{{live_folder_path }}{{ live_file_vmlinuz_file_name }}"
     fullpath_paremeter: e
 
 
