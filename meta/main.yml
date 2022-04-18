@@ -25,5 +25,8 @@ galaxy_info:
     - pxe
     - custom
     - customization
-#dependencies:
-#  - role : stefanhacker.ansible_extract_iso
+dependencies:
+  - role: stefanhacker.ansible_extract_iso
+    vars:
+      run: false
+      
