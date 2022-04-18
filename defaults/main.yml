@@ -8,7 +8,7 @@ tftp_root_folder: /srv/tftp/
 tftp_debian_installer_folder_with_arch: debian-installer/amd64/
 tftp_images_folder: "images/"
 tftp_os_name_with_arch : debianlive/x86_64/
-tftp_iso_filename: debianlive.iso1
+tftp_iso_filename: debianlive.iso
 #when the iso ist not copied other way, you can provide an url to download iso
 tftp_download_public_iso_url: https://cdimage.debian.org/debian-cd/current-live/amd64/iso-hybrid/debian-live-11.3.0-amd64-standard.iso
 tftp_server_ip_or_dnsname: 172.10.10.1
