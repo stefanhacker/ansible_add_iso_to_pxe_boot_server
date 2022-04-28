@@ -161,7 +161,7 @@
   register: stat_result_mv_vmlinuz
 
 - name: copy vmlinuz
-  raw: cp {{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}{{ live_file_vmlinuz_file_name }} {{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}vmlinuz
+  raw: "cp {{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}{{ live_file_vmlinuz_file_name }} {{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}vmlinuz"
   when: stat_result_mv_vmlinuz.stat.exists == False
 
 - name: Check initrd exist, in a few distro the initrd called initrd, that why we cant rename ist
@@ -170,5 +170,5 @@
   register: stat_result_mv_initrd
 
 - name: copy initrd
-  raw: cp {{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}{{ live_file_initrd_file_name }} {{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}initrd
+  raw: "cp {{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}{{ live_file_initrd_file_name }} {{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}initrd"
   when: stat_result_mv_initrd.stat.exists == False
