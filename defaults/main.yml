@@ -12,6 +12,9 @@ tftp_iso_filename: debianlive.iso
 #when the iso ist not copied other way, you can provide an url to download iso
 tftp_download_public_iso_url: https://cdimage.debian.org/debian-cd/current-live/amd64/iso-hybrid/debian-live-11.3.0-amd64-standard.iso
 tftp_server_ip_or_dnsname: 172.10.10.1
+#dvd/cd type is live cd or install. You can not insert packages in install dvd/cd only in live. squashfs is needed
+#values:live,install
+dvd_cd_typ: live
 #linux Livefolder variables, the folder were the filesystem.squash is in the extracted iso file
 live_folder_path: live/
 live_file_squash_file_name: filesystem.squashfs
