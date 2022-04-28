@@ -23,8 +23,9 @@ live_file_vmlinuz_file_name: vmlinuz-5.10.0-13-amd64
 #extract full iso for live boot over nfs.
 #if full iso needed because image uses nfs. the full image is extrated in the base folder
 #{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}/cdrom
-delete_extract_full_iso_to_cdrom_folder_before_extract: False
 extract_full_iso_to_cdrom_folder: False
+#delete extracted iso
+delete_extract_full_iso_to_cdrom_folder_before_extract: False
 #PXE Bootmenü Settings
 label: liveiso
 menu_label: "Debian 11 Live ISO"
