@@ -94,15 +94,26 @@
   when: live_file_squash_file_name is defined and live_file_initrd_file_name is defined and live_file_vmlinuz_file_name
 
 - name: Extract kernel and ramdisk from a LiveCD/Install DVD
-  include_role: 
-    name: stefanhacker.ansible_extract_iso
-  vars:
-    path_to_iso: "{{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}{{ tftp_iso_filename }}"
-    path_to_extract_dest:  "{{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}"
-    extract_folder_and_files_from_iso: 
-      - "{{ live_folder_path }}{{ live_file_initrd_file_name }}"
-      - "{{ live_folder_path }}{{ live_file_vmlinuz_file_name }}"
-    fullpath_paremeter: e
+  iso_extract:
+    image: "{{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}{{ tftp_iso_filename }}"
+    dest: "{{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}"
+    files: 
+    - "{{live_folder_path }}{{ live_file_initrd_file_name }}"
+    - "{{live_folder_path }}{{ live_file_vmlinuz_file_name }}"
+  
+
+
+
+#- name: Extract kernel and ramdisk from a LiveCD/Install DVD
+#  include_role: 
+#    name: stefanhacker.ansible_extract_iso
+#  vars:
+#    path_to_iso: "{{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}{{ tftp_iso_filename }}"
+#    path_to_extract_dest:  "{{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}"
+#    extract_folder_and_files_from_iso: 
+#      - "{{ live_folder_path }}{{ live_file_initrd_file_name }}"
+#      - "{{ live_folder_path }}{{ live_file_vmlinuz_file_name }}"
+#    fullpath_paremeter: e
 
 - name: Extract SQUASH Filesystem from a LiveCD if dvd_cd_typ = live and sqashfile exists
   include_role: 
@@ -141,17 +152,6 @@
     fullpath_paremeter: x
     extract_folder_and_files_from_iso: []
   when: extract_full_iso_to_cdrom_folder == True
-
-
-#  iso_extract:
-#    image: "{{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}{{ tftp_iso_filename }}"
-#    dest: "{{ tftp_root_folder }}{{ tftp_images_folder }}{{ tftp_os_name_with_arch }}"
-#    files: "{{ isofilelist }}"
-      #- "{{live_folder_path }}{{ live_file_squash_file_name }}"
-      #- "{{live_folder_path }}{{ live_file_initrd_file_name }}"
-      #- "{{live_folder_path }}{{ live_file_system_map_file_name }}"
-      #- "{{live_folder_path }}{{ live_file_vmlinuz_file_name }}"
-    #with_items: "{{ userdata }}"
 
 
 
